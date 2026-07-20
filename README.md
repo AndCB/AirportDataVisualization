@@ -1,58 +1,98 @@
-# Visualización de Operaciones Mensuales en Aeropuertos
+# Visualización de Operaciones Aeroportuarias - Costa Rica
 
-Este proyecto tiene como objetivo visualizar las operaciones mensuales en aeropuertos de Costa Rica a partir de los datos obtenidos de la API proporcionada por ARESEP. El análisis se centra en los datos desde 2020 en adelante, y la visualización se realiza mostrando el porcentaje de incremento en las operaciones mes a mes para cada año.
+Este proyecto tiene como objetivo visualizar las operaciones mensuales en los aeropuertos internacionales de Costa Rica a partir de datos abiertos de [ARESEP](https://datos.aresep.go.cr/).
 
-## Requisitos
+---
 
-Para ejecutar este proyecto, se necesita tener instalado:
+## Visualizaciones Disponibles
 
-- Python 3.x
-- Las siguientes bibliotecas de Python:
-  - `requests`
-  - `matplotlib`
+### 1. Incremento Porcentual por Aeropuerto (`operations_growth.py`)
 
-Pueden instalarlas ejecutando:
+Grafico interactivo que muestra la evolucion mensual de las operaciones como **porcentaje de incremento** respecto al primer mes del periodo (desde 2020).
+
+- Cada año se representa con una linea de color distinto
+- Un subplot independiente por cada aeropuerto
+- **Interactivo:** Pasa el mouse sobre los puntos para ver valores exactos
+- **Autoguardado:** Genera `operations_growth_airports.html`
 
 ```bash
-pip install requests matplotlib numpy
+python3 operations_growth.py
 ```
 
-# Descripción
+### 2. Heatmap de Estacionalidad (`airport_heatmap.py`)
 
-## Obtención de datos de la API
+Heatmap interactivo que muestra:
 
-Se realiza un GET a la API del ARESEP para obtener datos históricos de las operaciones de los aeropuertos internacionales de Costa Rica. La URL es la siguiente:
+- **Panel superior:** Volumen promedio de operaciones por aeropuerto y mes
+- **Panel inferior:** Distribucion porcentual del trafico anual de cada aeropuerto
+- **Interactivo:** Pasa el mouse sobre las celdas para ver detalles, zoom, exportar como PNG
+- **Autoguardado:** Genera `estacionalidad_aeropuertos.html`
 
-```python
-URL = "https://datos.aresep.go.cr/ws.datosabiertos/Services/IT/Aeropuerto.svc/ObtenerHistoricoOperativoOperacion"
+```bash
+python3 airport_heatmap.py
 ```
 
-El API no provee la opción de parametrización en el URL o cuerpo por lo que se deben recibir los datos de todos los años desde el 2009 y procesarlos según se necesite.
+### 3. Evolucion Temporal (`temporal_evolution.py`)
 
-## Filtrado y ordenado de datos
+Serie de tiempo interactiva de operaciones totales mes a mes desde 2009 hasta la actualidad.
 
-Una vez se obtienen los datos, se filtran para capturar solo los años del 2020 en adelante. Los datos se ordenan por mes para cada año y se calculas los incrementos porcentuales mensuales en las operaciones mes a mes.
+- Muestra la tendencia general del trafico aereo en Costa Rica
+- Incluye todos los aeropuertos combinados y por separado
+- Visualiza el impacto del COVID-19 y la recuperacion posterior
+- **Autoguardado:** Genera `temporal_evolution_airports.html`
 
-## Visualización
+```bash
+python3 temporal_evolution.py
+```
 
-Se utiliza matplotlib para la generación de una gráfica de líneas donde cada año se representa por una linea distinta. En la gráfica se muestra el incremento porcentual de las operaciones.
+### 4. Perfil de Estacionalidad (`seasonality_profile.py`)
 
-## Ejecución del código
+Grafico interactivo del patron mensual promedio de cada aeropuerto.
 
-Simplemente se debe ejecutar el script de python. El código generara una visualización que muestra como han cambiado las operaciones de mes a mes por cada año desde el 2020 para los diferentes aeropuertos.
+- Compara perfiles estacionales entre aeropuertos
+- Identifica meses pico y valle por aeropuerto
+- Revela diferencias entre aeropuertos turisticos y de negocios
+- **Autoguardado:** Genera `seasonality_profile_airports.html`
 
-# Instrucciones de uso
+```bash
+python3 seasonality_profile.py
+```
 
-1. Ejecutar el script: Al ejecutar el script se realizará una solicitud a la API, se procesaran los datos y se generara la gráfica.
-2. Interpretacion de la gráfica: La gráfica mostrará el porcentaje de incremento de operaciones para cada mes, permitiendo comparar cómo variaron las operaciones mes a mes para cada año.
-3. Modificar el código: Si se desean analizar otros datos o cambiar el enfoque del análisis se deberá de modificar el código.
+---
 
-# Ejemplo de uso
+## Requisitos e Instalacion
 
-Al ejecutar el código, se generará una gráfica como la siguiente:
-![image](https://github.com/user-attachments/assets/908cc909-a699-443f-b1e1-dc7a3aa4f8aa)
+### Python 3.x + entorno virtual
 
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
+### Dependencias incluidas
 
+| Paquete | Uso |
+|---------|-----|
+| `requests` | Llamadas a la API de ARESEP |
+| `plotly` | Todas las visualizaciones (interactivas) |
+| `pandas` | Procesamiento de datos tabulares |
+| `numpy` | Operaciones numericas |
 
+---
 
+## API de ARESEP
+
+**Endpoint:**
+```
+https://datos.aresep.go.cr/ws.datosabiertos/Services/IT/Aeropuerto.svc/ObtenerHistoricoOperativoOperacion
+```
+
+**Datos disponibles:**
+- **4 aeropuertos:** Juan Santamaria, Daniel Oduber Quiros, Tobias Bolanos, Limon
+- **Periodo:** 2009 - 2026
+- **Campos:** `id_Registro`, `id_Aeropuerto`, `aeropuerto`, `id_Mes`, `mes`, `anho`, `totalOperaciones`
+
+> Nota: La API no acepta parametros de filtro; se descargan todos los datos y se procesan localmente.
+
+---
