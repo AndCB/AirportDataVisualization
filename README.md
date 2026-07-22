@@ -1,3 +1,5 @@
+> 🌐 **Idioma:** [Español](README.md) | **[English](README.en.md)**
+
 # Visualización de Operaciones Aeroportuarias - Costa Rica
 
 Este proyecto tiene como objetivo visualizar las operaciones mensuales en los aeropuertos internacionales de Costa Rica a partir de datos abiertos de [ARESEP](https://datos.aresep.go.cr/).
